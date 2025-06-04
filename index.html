@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title> SGP-Bench: Can Large Language Models Understand <strong>S</strong>ymbolic <strong>G</strong>raphics <strong>P</strong>rograms?</title>
 
-  <link rel="icon" href="./static/images/sgp_icon.png">
+  <link rel="icon" href="./static/images/poet_icon.png">
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
 
@@ -169,7 +169,7 @@
               Large language models (LLMs) are exposed to vast amounts of online data, including open-access SVG data. To investigate whether their semantic understanding ability is due to potential data leakage, we propose a semantic consistency test by introducing global translations or rotations to SVG graphics, ensuring SE(2) invariance. Such spatial interventions <strong>fundamentally alter the code representation</strong>, as SVG graphics consist of lines and Bezier curves with anchor points, and SE(2) operations change all numerical values in the code. However, the SVG's semantics—such as shape or color—remain unaffected by this perturbation. This allows us to examine how LLMs respond when the same vector graphics are presented with drastic code-numerical changes. If the model maintains consistency under these conditions, it suggests that the semantic understanding is likely based on a fundamental level of comprehension or visual imagery rather than mere memorization of the code.
             </p>
             <div class="content has-text-centered">
-              <img src="static/images/consistency.png" alt="algebraic reasoning" class="center" style="width: 40%; height: auto;">
+              <img src="static/images/sv_comp.png" alt="algebraic reasoning" class="center" style="width: 70%; height: auto;">
               <p> The semantic consistency test assesses if semantic understanding remains the same when the program is perturbed without semantically changing the image content.</p>
             </div>
             <p>
@@ -222,7 +222,7 @@
               <p>
                 To construct our benchmark, we need questions about a symbolic program based on its rendered image. To build a large benchmark, it is essential that we consider how we can effectively scale up the question collection with minimal human labeling efforts. To this end, we use a powerful large vision-language model (e.g., GPT-4o) to generate many semantic questions based on the rendered images, and then we inspect them manually to make sure that most of the questions are reasonable and the answer to them is also correct. We also run a human study over 500 of the automatically generated questions along with the corresponding images, and find high agreement. The overall procedure for our dataset creation is given in the following figure: 
               </p>
-              <img src="static/images/sgp_data_creation.png" alt="algebraic reasoning" class="center" style="width: 40%; height: auto;">
+              <img src="static/images/block_pattern.png" alt="algebraic reasoning" class="center" style="width: 100%; height: auto;">
               <br>
               <p>
                 In this pipeline, the rendering of symbolic programs and the GPT-4o querying are both scalable and can be done with minimal human involvement. Human annotators then inspect the generated question-answer pairs based on the rendered image, which requires much less efforts than manually writing questions and answers. We emphasize that this program-question-answer triplet data creation method is general, as it works for most of the symbolic graphics programs. SVG programs can directly produce 2D images, so it is straightforward to use this pipeline. For CAD programs, they produce 3D models and we first render them into 2D images with a few fixed camera positions. These rendered images from different views are then combined together to query GPT-4o, and the following procedures are identical to the SVG case.
@@ -422,7 +422,7 @@
                 Is it really easy to answer semantic reasoning questions over symbolic graphics programs? We provide an intriguing experiment to demonstrate that SVG programs can be quite difficult for LLMs to understand such that even if the corresponding rendered images are fairly easy for humans to recognize, all these powerful LLMs still fail dramatically, only reaching a chance-level accuracy. Specifically, we construct symbolic graphics programs that can produce MNIST-like images, as shown in bellow image. 
               </p>
               <div class="content has-text-centered">
-                <img src="static/images/sgp_mnist.png" alt="algebraic reasoning" class="center" style="width: 90%; height: auto;">
+                <img src="static/images/orth_error.png" alt="algebraic reasoning" class="center" style="width: 90%; height: auto;">
                 <p> Examples of our SGP-MNIST challenge, hand-written digit constructed by SVG programs.</p>
               </div>
               <p>
