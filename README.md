@@ -1,5 +1,5 @@
 # POET
-Homepage of POET, "Reparameterized LLM Training via Orthogonal
+The official project page of POET, "Reparameterized LLM Training via Orthogonal
 Equivalence Transformation". 
 
 <!--
