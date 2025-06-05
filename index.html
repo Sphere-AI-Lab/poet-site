@@ -41,7 +41,25 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js"></script>
 
-  
+  <!-- Add the new professional table styles here: -->
+  <style>
+    /* Professional Table Styles */
+    .table-container {
+      margin: 2em auto;
+      max-width: 900px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+    /* ... rest of the new CSS ... */
+  </style>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
 </head>
 <body>
 
@@ -146,11 +164,11 @@
   </section>
 
 <section class="section">
-  <div class="container" style="margin-bottom: 2vh;">
+  <div class="container is-max-desktop">
     <!-- Abstract. -->
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Can LLMs visually imagine graphics code content?</h2>
+        <h2 class="title is-3">POET: A New Training Paradigm for Large Language Models</h2>
         <div class="content has-text-justified">
           <p>
             While Large language models (LLMs) are driving the rapid advancement of artificial intelligence, effectively and reliably training these large models remains one of the field's most significant challenges. To address this challenge, we propose POET, a novel re<strong>P</strong>arameterized training algorithm that uses <strong>O</strong>rthogonal <strong>E</strong>quivalence <strong>T</strong>ransformation to optimize neurons. Specifically, POET reparameterizes each neuron with two learnable orthogonal matrices and a fixed random weight matrix. Because of its provable preservation of spectral properties of weight matrices, POET can stably optimize the objective function with improved generalization. We further develop efficient approximations that make POET flexible and scalable for training large-scale neural networks. Extensive experiments validate the effectiveness and scalability of POET in training LLMs.
@@ -160,56 +178,27 @@
     </div>
     <!--/ Abstract. -->
 </div>
-</section>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3">SGP-Bench can avoid data contamination: SE(2) Consistency Test</h2>
-          <div class="content has-text-justified">
-            <p>
-              Large language models (LLMs) are exposed to vast amounts of online data, including open-access SVG data. To investigate whether their semantic understanding ability is due to potential data leakage, we propose a semantic consistency test by introducing global translations or rotations to SVG graphics, ensuring SE(2) invariance. Such spatial interventions <strong>fundamentally alter the code representation</strong>, as SVG graphics consist of lines and Bezier curves with anchor points, and SE(2) operations change all numerical values in the code. However, the SVG's semantics—such as shape or color—remain unaffected by this perturbation. This allows us to examine how LLMs respond when the same vector graphics are presented with drastic code-numerical changes. If the model maintains consistency under these conditions, it suggests that the semantic understanding is likely based on a fundamental level of comprehension or visual imagery rather than mere memorization of the code.
-            </p>
-            <div class="content has-text-centered">
-              <img src="static/images/sv_comp.png" alt="algebraic reasoning" class="center" style="width: 70%; height: auto;">
-              <p> The semantic consistency test assesses if semantic understanding remains the same when the program is perturbed without semantically changing the image content.</p>
-            </div>
-            <p>
-              Our experiments with the SVG-Invariance benchmark demonstrate that <strong>most LLMs exhibit robust semantic understanding of graphics programs under translation (T) and translation + rotation (SE(2)) perturbations</strong>. Not only do the models remain consistent in their predictions under perturbations, but their performance on perturbed inputs also shows minimal fluctuation compared to their performance on the SVG-Understanding benchmark. We posit that this indicates that the semantic understanding ability that we evaluate of LLMs is unlikely due to data leakage, but rather, could stem from a potential <strong>foundational capability to interpret the semantics of deterministic, symbolic graphics programs</strong>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>
-
 <br>
 <br>
-
 
 <!-- BUILDING SECTION -->
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-    <h1 class="title is-1 mmmu">Building SGP-Bench</h1>
+    <h1 class="title is-1 mmmu">Spectral Property of Weight Matrices</h1>
   </div>
 </section>
 
-
 <section class="section">
   <div class="container">
-
     <!-------------------------------------------------------------------- RESULTS SECTION -------------------------------------------------------------------->
     <section class="section">
       <div class="container">
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Symbolic Graphics Program Understanding</h2>
+            <h2 class="title is-3">Spectral Perperties and Generalization</h2>
             <div class="content has-text-justified">
               <p>
-                We introduce the task of semantic symbolic graphics program understanding, where our goal is to assess to what extent a LLM is able to understand the symbolic graphics program, which may begin to belie some latent capability to <b>visually imagine</b>. Specifically, we take advantage of the correspondence between symbolic graphics programs and rendered images, and then we characterize the understanding of symbolic graphics programs as the semantic understanding of the corresponding rendered image. To do so, we use the performance on question-answering to evaluate the semantic understanding of images. The same set of questions, along with the corresponding symbolic graphics programs, are then used to evaluate the symbolic program understanding of LLMs. A brief illustration of symbolic graphics program understanding is given in the following figure. The intuition behind this evaluation is that, if an LLM really has a good sense of the symbolic graphics, then the LLM should have a rough understanding about its rendered image such that it is able answer arbitrary semantic questions regarding this rendered image.
-              </p>
-              <img src="static/images/val_ppl.png" alt="algebraic reasoning" class="center">
-              <br>
-              <p>
-                Symbolic graphics program understanding can also be viewed as a form of visual question answering in the sense that visual input is represented by a symbolic program representation. Compared to existing vision-language models that encodes images with a text-aligned neural encoder, our paper considers the case where the visual input are encoded by a symbolic program that can exactly recover the graphics content. From this perspective, our task aims to study and uncover the potential of using symbolic programs as a representation to perform visual reasoning.
+                The <i>de facto</i> way for training LLMs is to directly optimize weight matrices with the Adam optimizer. While conceptually simple, this direct optimization can be computationally intensive (due to the poor scaling with model size) and requires careful hyperparameter tuning to ensure stable convergence. More importantly, its generalization can remain suboptimal even if the training loss is perfectly minimized. To stabilize training and enhance generalization, various weight regularization methods and weight normalization techniques have been proposed. Most of these methods boil down to improving spectral properties of weight matrices (<i>i.e.</i>, singular values) either explicitly or implicitly. Intuitively, the spectral norm of a weight matrix (<i>i.e.</i>, the largest singular value) provides an upper bound on how much a matrix can amplify the input vectors, which connects to the generalization properties. In general, smaller spectral norms (<i>i.e.</i>, better smoothness) are considered to be associated with stronger generalization, which inspires explicit spectrum control. Theoretical results also suggest that weight matrices with bounded spectrum can provably guarantee generalization.
               </p>
             </div>
           </div>
@@ -217,15 +206,42 @@
 
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Automated Dataset Creation Pipeline</h2>
+            <h2 class="title is-3">Spectrum-Preserving Weight Update</h2>
             <div class="content has-text-justified">
               <p>
-                To construct our benchmark, we need questions about a symbolic program based on its rendered image. To build a large benchmark, it is essential that we consider how we can effectively scale up the question collection with minimal human labeling efforts. To this end, we use a powerful large vision-language model (e.g., GPT-4o) to generate many semantic questions based on the rendered images, and then we inspect them manually to make sure that most of the questions are reasonable and the answer to them is also correct. We also run a human study over 500 of the automatically generated questions along with the corresponding images, and find high agreement. The overall procedure for our dataset creation is given in the following figure: 
+                To achieve effective weight spectrum control without the limitations above, we propose POET, a re<u>P</u>arameterized training algorithm that uses <u>O</u>rthogonal <u>E</u>quivalence <u>T</u>ransformation to indirectly learn weight matrices. Specifically, POET reparameterizes a weight matrix 
+                \( \mathbf{W} \in \mathbb{R}^{m \times n} \) 
+                with 
+                \( \mathbf{R} \mathbf{W}_0 \mathbf{P} \)
+                where 
+                \( \mathbf{W}_0 \in \mathbb{R}^{m \times n} \) 
+                is a randomly initialized weight matrix, 
+                \( \mathbf{R} \in \mathbb{R}^{m \times m} \) 
+                and 
+                \( \mathbf{P} \in \mathbb{R}^{n \times n} \) 
+                are two orthogonal matrices. Instead of optimizing weight matrices directly, POET keeps the randomly initialized weight matrix 
+                \( \mathbf{W}_0 \) 
+                unchanged during training and learns two orthogonal matrices 
+                \( \mathbf{R}, \mathbf{P} \) 
+                to transform 
+                \( \mathbf{W}_0 \).
+                This reparameterization preserves the singular values of weights while allowing flexible optimization of the singular vectors.
               </p>
-              <img src="static/images/block_pattern.png" alt="algebraic reasoning" class="center" style="width: 100%; height: auto;">
+              <div class="content has-text-centered">
+                <img src="static/images/sv_comp.png" alt="algebraic reasoning" class="center" style="width: 90%; height: auto;">
+                <p> Visualization of the weight update mechanism of POET-BS and POET-FS after 100 steps of update and \(T_m = 1\). </p>
+              </div>
               <br>
               <p>
-                In this pipeline, the rendering of symbolic programs and the GPT-4o querying are both scalable and can be done with minimal human involvement. Human annotators then inspect the generated question-answer pairs based on the rendered image, which requires much less efforts than manually writing questions and answers. We emphasize that this program-question-answer triplet data creation method is general, as it works for most of the symbolic graphics programs. SVG programs can directly produce 2D images, so it is straightforward to use this pipeline. For CAD programs, they produce 3D models and we first render them into 2D images with a few fixed camera positions. These rendered images from different views are then combined together to query GPT-4o, and the following procedures are identical to the SVG case.
+                Our proposed POET has two key properties:
+                <ul>
+                  <li>
+                    <strong>Strong spectrum control:</strong> Because orthogonal transformations do not change the singular values of weight matrices, POET keeps the weight spectrum the same as the randomly initialized weight matrices (empirically validated even with approximations). Through the initialization scheme, POET thus directly controls the singular value distribution of its weight matrices. As a result, and in contrast to standard LLM training, POET matrices avoid undesirable large singular values after training. To further facilitate the POET algorithm, we introduce two new initialization schemes: normalized Gaussian initialization and uniform spectrum initialization, which can ensure the resulting weight matrices have bounded singular values.
+                  </li>
+                  <li>
+                    <strong>Efficient approximation:</strong> While a naive implementation of POET can be computationally expensive, its inherent flexibility opens up opportunities for efficient and scalable training. To address the key challenge of optimizing large orthogonal matrices, we introduce two levels of approximations: <em>stochastic primitive optimization</em>, which factorizes a large orthogonal matrix \( \mathbf{R} \in \mathbb{R}^{m \times m} \) into a product of primitive orthogonal matrices with fewer trainable parameters and uses a merge-then-reinitialize trick for efficiency, and <em>approximate orthogonality via Cayley-Neumann parameterization</em>, which maintains orthogonality with low computational overhead by approximating the Cayley orthogonal parameterization with Neumann series and also benefits from the merge-then-reinitialize trick to prevent error accumulation.
+                  </li>
+                </ul>
               </p>
             </div>
           </div>
@@ -236,11 +252,109 @@
   </section>
 
 
+<!-- BUILDING SECTION -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 class="title is-1 mmmu">Training with POET</h1>
+  </div>
+</section>
+
+
+<section class="section">
+<div class="container">
+  <!-------------------------------------------------------------------- RESULTS SECTION -------------------------------------------------------------------->
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Training Algorithm</h2>
+          <div class="content has-text-justified">
+            <p><strong>Step 1: Initialization.</strong> We initialize the weight matrices using normalized Gaussian: \( \mathbf{W} \leftarrow \mathbf{W}_0 \).</p>
+            <p><strong>Step 2: Orthogonal matrix initialization.</strong> For fully stochastic SPO, we randomly sample an index set \( \mathbf{S} \), and parameterize \( \tilde{\mathbf{G}}_{R} \in \mathbb{R}^{b \times b} \) and \( \tilde{\mathbf{G}}_{P} \in \mathbb{R}^{b \times b} \) using CNP. Both matrices are initialized as identity, so \( \mathbf{R} \) and \( \mathbf{P} \) also start as identity matrices. For block-stochastic SPO, we sample a random permutation matrix \( \mathbf{\Psi}_R, \mathbf{\Psi}_P \), and parameterize \( \{ \tilde{\mathbf{G}}_R^{1}, \cdots, \tilde{\mathbf{G}}_R^{\lceil m/b \rceil} \} \) and \( \{ \tilde{\mathbf{G}}_P^{1}, \cdots, \tilde{\mathbf{G}}_P^{\lceil m/b \rceil} \} \) using CNP. Then we initialize them as the identity, so \( \mathbf{R} \) and \( \mathbf{P} \) again start as identity matrices.</p>
+            <p><strong>Step 3: Efficient orthogonal parameterization.</strong> For fully stochastic SPO, we have \( \mathbf{R} = \mathbf{I}_m + \mathbf{D}(\mathbf{S})(\tilde{\mathbf{G}}_R - \mathbf{I}_b)\mathbf{D}(\mathbf{S})^\top \) and \( \mathbf{P} = \mathbf{I}_m + \mathbf{D}(\mathbf{S})(\tilde{\mathbf{G}}_P - \mathbf{I}_b)\mathbf{D}(\mathbf{S})^\top \). For block-stochastic SPO, we have \( \mathbf{R} = \mathbf{\Psi}_R^\top \mathrm{Diag}(\tilde{\mathbf{G}}^1_R, \cdots, \tilde{\mathbf{G}}^{\lceil m/b \rceil}_R)\mathbf{\Psi}_R \) and \( \mathbf{P} = \mathbf{\Psi}_P^\top \mathrm{Diag}(\tilde{\mathbf{G}}^1_P, \cdots, \tilde{\mathbf{G}}^{\lceil m/b \rceil}_P)\mathbf{\Psi}_P \).</p>
+            <p><strong>Step 4: Inner training loop for updating orthogonal matrices.</strong> The equivalent weight matrix in the forward pass is \( \mathbf{R}\mathbf{W}\mathbf{P} \). Gradients are backpropagated through \( \mathbf{R} \) and \( \mathbf{P} \) to update \( \tilde{\mathbf{G}}_{R}, \tilde{\mathbf{G}}_{P} \) (fully stochastic) or \( \tilde{\mathbf{G}}_{R}^i, \tilde{\mathbf{G}}_{P}^i, \forall i \) (block-stochastic). This inner loop runs for a fixed number of iterations.</p>
+            <p><strong>Step 5: Merge-then-reinitialize.</strong> The learned orthogonal matrices \( \mathbf{R} \) and \( \mathbf{P} \) are merged into the weight matrix by \( \mathbf{W} \leftarrow \mathbf{R}\mathbf{W}\mathbf{P} \). If not terminated, return to <strong>Step 2</strong> for reinitialization.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Efficient Approximation to Orthogonality</h2>
+          <div class="content has-text-justified">
+            <p>
+              To construct our benchmark, we need questions about a symbolic program based on its rendered image. To build a large benchmark, it is essential that we consider how we can effectively scale up the question collection with minimal human labeling efforts. To this end, we use a powerful large vision-language model (e.g., GPT-4o) to generate many semantic questions based on the rendered images, and then we inspect them manually to make sure that most of the questions are reasonable and the answer to them is also correct. We also run a human study over 500 of the automatically generated questions along with the corresponding images, and find high agreement. The overall procedure for our dataset creation is given in the following figure: 
+            </p>
+            <img src="static/images/block_pattern.png" alt="algebraic reasoning" class="center" style="width: 100%; height: auto;">
+            <br>
+            <p>
+              In this pipeline, the rendering of symbolic programs and the GPT-4o querying are both scalable and can be done with minimal human involvement. Human annotators then inspect the generated question-answer pairs based on the rendered image, which requires much less efforts than manually writing questions and answers. We emphasize that this program-question-answer triplet data creation method is general, as it works for most of the symbolic graphics programs. SVG programs can directly produce 2D images, so it is straightforward to use this pipeline. For CAD programs, they produce 3D models and we first render them into 2D images with a few fixed camera positions. These rendered images from different views are then combined together to query GPT-4o, and the following procedures are identical to the SVG case.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+</section>
+
+
 
 <!-- BUILDING SECTION -->
 <section class="hero is-light is-small">
   <div class="hero-body has-text-centered">
-    <h1 id="SIT" class="title is-1 mmmu">Symbolic Instruction Tuning (SIT)</h1>
+    <h1 class="title is-1 mmmu">Beyond AdamW: Fewer Parameters, Lower Perplexity</h1>
+  </div>
+</section>
+
+
+<section class="section">
+<div class="container">
+  <!-------------------------------------------------------------------- RESULTS SECTION -------------------------------------------------------------------->
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Symbolic Graphics Program Understanding</h2>
+          <div class="content has-text-justified">
+            <p>
+              We introduce the task of semantic symbolic graphics program understanding, where our goal is to assess to what extent a LLM is able to understand the symbolic graphics program, which may begin to belie some latent capability to <b>visually imagine</b>. Specifically, we take advantage of the correspondence between symbolic graphics programs and rendered images, and then we characterize the understanding of symbolic graphics programs as the semantic understanding of the corresponding rendered image. To do so, we use the performance on question-answering to evaluate the semantic understanding of images. The same set of questions, along with the corresponding symbolic graphics programs, are then used to evaluate the symbolic program understanding of LLMs. A brief illustration of symbolic graphics program understanding is given in the following figure. The intuition behind this evaluation is that, if an LLM really has a good sense of the symbolic graphics, then the LLM should have a rough understanding about its rendered image such that it is able answer arbitrary semantic questions regarding this rendered image.
+            </p>
+            <img src="static/images/val_ppl.png" alt="algebraic reasoning" class="center">
+            <br>
+            <p>
+              Symbolic graphics program understanding can also be viewed as a form of visual question answering in the sense that visual input is represented by a symbolic program representation. Compared to existing vision-language models that encodes images with a text-aligned neural encoder, our paper considers the case where the visual input are encoded by a symbolic program that can exactly recover the graphics content. From this perspective, our task aims to study and uncover the potential of using symbolic programs as a representation to perform visual reasoning.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Automated Dataset Creation Pipeline</h2>
+          <div class="content has-text-justified">
+            <p>
+              To construct our benchmark, we need questions about a symbolic program based on its rendered image. To build a large benchmark, it is essential that we consider how we can effectively scale up the question collection with minimal human labeling efforts. To this end, we use a powerful large vision-language model (e.g., GPT-4o) to generate many semantic questions based on the rendered images, and then we inspect them manually to make sure that most of the questions are reasonable and the answer to them is also correct. We also run a human study over 500 of the automatically generated questions along with the corresponding images, and find high agreement. The overall procedure for our dataset creation is given in the following figure: 
+            </p>
+            <img src="static/images/block_pattern.png" alt="algebraic reasoning" class="center" style="width: 100%; height: auto;">
+            <br>
+            <p>
+              In this pipeline, the rendering of symbolic programs and the GPT-4o querying are both scalable and can be done with minimal human involvement. Human annotators then inspect the generated question-answer pairs based on the rendered image, which requires much less efforts than manually writing questions and answers. We emphasize that this program-question-answer triplet data creation method is general, as it works for most of the symbolic graphics programs. SVG programs can directly produce 2D images, so it is straightforward to use this pipeline. For CAD programs, they produce 3D models and we first render them into 2D images with a few fixed camera positions. These rendered images from different views are then combined together to query GPT-4o, and the following procedures are identical to the SVG case.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </div>
+</section>
+
+
+
+<!-- BUILDING SECTION -->
+<section class="hero is-light is-small">
+  <div class="hero-body has-text-centered">
+    <h1 id="SIT" class="title is-1 mmmu">Parameter-efficient Training with </h1>
   </div>
 </section>
 
@@ -264,131 +378,96 @@
 
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Improving Generic Reasoning with Symbolic Graphics Programs</h2>
+            <h2 class="title is-3">Parameter-efficient Training wit</h2>
             <div class="content has-text-justified">
               <p>
                 Our SIT data can also be used in a reverse fashion (rev-SIT), i.e., rephrasing the answer as the new question and the question as the new answer. See the comparison between original and reverse SIT data in the bellow figure. rev-SIT resembles <strong>code instructing tuning data</strong>, i.e., given an instruction, generate the corrsponding graphics code. The instruction in rev-SIT would be a text description and the LLM should learn to generate code that when it is rendered, best fit the text description.
               </p>
               <div class="content has-text-centered">
                 <img src="static/images/coverage_plot.png" alt="algebraic reasoning" class="center" style="width: 90%; height: auto;">
-                <p> Visualization of the weight update mechanism of POET-BS and POET-FS after 100 steps of update and T_m = 1. </p>
+                <p> Visualization of the weight update mechanism of POET-BS and POET-FS after 100 steps of update and \(T_m = 1\). </p>
               </div>
               <p>
                 We evaluate the effectiveness of using SIT data to improve generic instruction tuning performance by mixing additional SIT data into the Open-Instruct data.
               </p>
               <div class="table-container">
-                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" style="border-collapse: collapse;">
-                    <thead style="background-color: #f5f5f5;">
-                        <tr style="border-bottom: 2px solid #ddd;">
-                            <th style="padding: 10px;">Benchmark</th>
-                            <th style="padding: 10px;">Open-Instruct</th>
-                            <th style="padding: 10px;">Open-Instruct-SIT</th>
-                            <th style="padding: 10px;">Open-Instruct-rev-SIT</th>
-                            <th style="padding: 10px;">Open-Instruct-mixed-SIT</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">XNLI</td>
-                            <td style="padding: 10px;">41.8</td>
-                            <td style="padding: 10px;"><strong>43.3</strong> <span style="color: green;">(+1.5)</span></td>
-                            <td style="padding: 10px;">43.1 <span style="color: green;">(+1.3)</span></td>
-                            <td style="padding: 10px;">42.9 <span style="color: green;">(+1.1)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">IFEval</td>
-                            <td style="padding: 10px;">14.8 / 24.9</td>
-                            <td style="padding: 10px;">16.3 <span style="color: green;">(+1.5)</span> / 28.9 <span style="color: green;">(+4.0)</span></td>
-                            <td style="padding: 10px;"><strong>18.3</strong> <span style="color: green;">(+3.5)</span> / <strong>30.5</strong> <span style="color: green;">(+5.6)</span></td>
-                            <td style="padding: 10px;">16.6 <span style="color: green;">(+1.8)</span> / 29.6 <span style="color: green;">(+4.7)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">HellaSwag</td>
-                            <td style="padding: 10px;">60.0</td>
-                            <td style="padding: 10px;">60.2 <span style="color: green;">(+0.2)</span></td>
-                            <td style="padding: 10px;"><strong>60.5</strong> <span style="color: green;">(+0.5)</span></td>
-                            <td style="padding: 10px;">60.4 <span style="color: green;">(+0.4)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">AGIEval</td>
-                            <td style="padding: 10px;">23.7</td>
-                            <td style="padding: 10px;">30.3 <span style="color: green;">(+6.6)</span></td>
-                            <td style="padding: 10px;"><strong>31.6</strong> <span style="color: green;">(+7.9)</span></td>
-                            <td style="padding: 10px;">29.2 <span style="color: green;">(+5.5)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">C-Eval</td>
-                            <td style="padding: 10px;">46.4</td>
-                            <td style="padding: 10px;">47.9 <span style="color: green;">(+1.5)</span></td>
-                            <td style="padding: 10px;">48.0 <span style="color: green;">(+1.6)</span></td>
-                            <td style="padding: 10px;"><strong>48.1</strong> <span style="color: green;">(+1.7)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">BigBenchHard</td>
-                            <td style="padding: 10px;">59.5</td>
-                            <td style="padding: 10px;">60.7 <span style="color: green;">(+1.2)</span></td>
-                            <td style="padding: 10px;">60.2 <span style="color: green;">(+0.7)</span></td>
-                            <td style="padding: 10px;"><strong>61.2</strong> <span style="color: green;">(+1.7)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">Arithmetic</td>
-                            <td style="padding: 10px;">89.8</td>
-                            <td style="padding: 10px;"><strong>91.8</strong> <span style="color: green;">(+2.0)</span></td>
-                            <td style="padding: 10px;">90.1 <span style="color: green;">(+0.3)</span></td>
-                            <td style="padding: 10px;"><strong>91.8</strong> <span style="color: green;">(+2.0)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">GSM8k</td>
-                            <td style="padding: 10px;">48.2</td>
-                            <td style="padding: 10px;">50.7 <span style="color: green;">(+2.5)</span></td>
-                            <td style="padding: 10px;">51.0 <span style="color: green;">(+2.8)</span></td>
-                            <td style="padding: 10px;"><strong>51.5</strong> <span style="color: green;">(+3.3)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">CoQA</td>
-                            <td style="padding: 10px;">67.9</td>
-                            <td style="padding: 10px;"><strong>69.1</strong> <span style="color: green;">(+1.2)</span></td>
-                            <td style="padding: 10px;">68.7 <span style="color: green;">(+0.8)</span></td>
-                            <td style="padding: 10px;"><strong>69.1</strong> <span style="color: green;">(+1.2)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">PIQA</td>
-                            <td style="padding: 10px;">79.9</td>
-                            <td style="padding: 10px;">80.3 <span style="color: green;">(+0.4)</span></td>
-                            <td style="padding: 10px;">80.3 <span style="color: green;">(+0.4)</span></td>
-                            <td style="padding: 10px;"><strong>80.4</strong> <span style="color: green;">(+0.5)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">MMLU</td>
-                            <td style="padding: 10px;">60.4</td>
-                            <td style="padding: 10px;">61.0 <span style="color: green;">(+0.6)</span></td>
-                            <td style="padding: 10px;">61.1 <span style="color: green;">(+0.7)</span></td>
-                            <td style="padding: 10px;"><strong>61.6</strong> <span style="color: green;">(+1.2)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">MathQA</td>
-                            <td style="padding: 10px;">39.3</td>
-                            <td style="padding: 10px;">40.4 <span style="color: green;">(+1.1)</span></td>
-                            <td style="padding: 10px;">40.3 <span style="color: green;">(+1.0)</span></td>
-                            <td style="padding: 10px;"><strong>40.7</strong> <span style="color: green;">(+1.4)</span></td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #ddd;">
-                            <td style="padding: 10px;">SQuAD2.0</td>
-                            <td style="padding: 10px;">28.9</td>
-                            <td style="padding: 10px;">28.7 <span style="color: red;">(-0.2)</span></td>
-                            <td style="padding: 10px;"><strong>31.6</strong> <span style="color: green;">(+2.7)</span></td>
-                            <td style="padding: 10px;">29.9 <span style="color: green;">(+1.0)</span></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px;">ASDiv</td>
-                            <td style="padding: 10px;">18.5</td>
-                            <td style="padding: 10px;"><strong>21.8</strong> <span style="color: green;">(+3.3)</span></td>
-                            <td style="padding: 10px;">20.1 <span style="color: green;">(+1.6)</span></td>
-                            <td style="padding: 10px;">21.3 <span style="color: green;">(+2.8)</span></td>
-                        </tr>
-                    </tbody>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Model (# tokens)</th>
+                      <th>60M (30B)</th>
+                      <th>130M (40B)</th>
+                      <th>350M (40B)</th>
+                      <th>1.3B (50B)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>AdamW</td>
+                      <td>26.68 (25.30M)</td>
+                      <td>20.82 (84.93M)</td>
+                      <td>16.78 (302.38M)</td>
+                      <td>14.73 (1.21B)</td>
+                    </tr>
+                    <tr>
+                      <td>Galore</td>
+                      <td>29.81 (25.30M)</td>
+                      <td>22.35 (84.93M)</td>
+                      <td>17.99 (302.38M)</td>
+                      <td>18.33 (1.21B)</td>
+                    </tr>
+                    <tr>
+                      <td>LoRA<sub>r=64</sub></td>
+                      <td>39.70 (4.85M)</td>
+                      <td>32.07 (11.21M)</td>
+                      <td>25.19 (30.28M)</td>
+                      <td>20.55 (59.38M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>BS, b=64</sub></td>
+                      <td>29.52 (2.39M)</td>
+                      <td>24.52 (5.52M)</td>
+                      <td>20.29 (14.90M)</td>
+                      <td>18.28 (29.22M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>BS, b=128</sub></td>
+                      <td>26.90 (4.81M)</td>
+                      <td>21.86 (11.12M)</td>
+                      <td>18.05 (30.04M)</td>
+                      <td>16.24 (58.91M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>BS, b=256</sub></td>
+                      <td><b>25.29</b> (9.66M)</td>
+                      <td><b>19.88</b> (22.33M)</td>
+                      <td>16.27 (60.32M)</td>
+                      <td>14.56 (118.26M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>FS, b=1/8</sub></td>
+                      <td>34.06 (0.53M)</td>
+                      <td>29.67 (1.78M)</td>
+                      <td>24.61 (6.34M)</td>
+                      <td>18.46 (25.39M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>FS, b=1/4</sub></td>
+                      <td>28.69 (2.13M)</td>
+                      <td>23.55 (7.13M)</td>
+                      <td>19.42 (25.44M)</td>
+                      <td>17.60 (101.66M)</td>
+                    </tr>
+                    <tr style="background-color: #f5f7fa;">
+                      <td>POET<sub>FS, b=1/2</sub></td>
+                      <td>25.37 (8.54M)</td>
+                      <td>19.94 (28.56M)</td>
+                      <td><b>15.95</b> (101.86M)</td>
+                      <td><b>13.70</b> (406.88M)</td>
+                    </tr>
+                  </tbody>
                 </table>
-            </div>            
+              </div>     
             </div>
           </div>
         </div>
@@ -480,14 +559,6 @@
     </section>
     </div>
   </section>
-
-
-<!-- Visualization SECTION -->
-<section class="hero is-light is-small">
-  <div class="hero-body has-text-centered">
-    <h1 class="title is-1 mmmu">Dataset Examples</h1>
-  </div>
-</section>
 
 
 <!-- @PAN TODO: bibtex -->
