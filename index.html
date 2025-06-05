@@ -514,6 +514,21 @@
 
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
+            <h2 class="title is-3">Performance under a constant parameter budget</h2>
+            <div class="content has-text-justified">
+              <p>
+                Since POET optimizes two orthogonal matrices \( \mathbf{R}, \mathbf{P} \) simultaneously, a natural question arises: <em>which matrix should receive more parameter budget under a fixed total constraint?</em> To investigate this, we conduct a controlled experiment where different ratios of trainable parameters are allocated to \( \mathbf{R} \) and \( \mathbf{P} \) under a fixed total budget. All other settings (e.g., architecture, data) remain unchanged, with full details provided in the Appendix. We use validation perplexity as the evaluation metric. The total parameter budget matches that of fully stochastic POET with \( b = \frac{1}{h}m \) for \( \mathbf{R} \) and \( b = \frac{1}{h}n \) for \( \mathbf{P} \), where \( h = 8 \), \( 4 \), and \( 3 \) correspond to small, medium, and large budgets, respectively. The results show that POET with a balanced allocation between \( \mathbf{R} \) and \( \mathbf{P} \) yields the best performance.
+              </p>
+              <div class="content has-text-centered">
+                <img src="static/images/budget.png" alt="algebraic reasoning" class="center" style="width: 50%; height: auto;">
+                <p> Performance of POET under a constant total parameter budget on \( \mathbf{R} \) and \( \mathbf{P} \). </p>
+              </div> 
+            </div>
+          </div>
+        </div>
+
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
             <h2 class="title is-3">Weight Update Evenness of Different POET Variants</h2>
             <div class="content has-text-justified">
               <p>
