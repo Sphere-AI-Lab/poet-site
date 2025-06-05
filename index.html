@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>SGP-Bench</title>
+  <title>POET</title>
     <style>
         .hidden {
             display: none;
@@ -12,9 +12,9 @@
   <meta charset="utf-8">
   <meta name="description"
         content="A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark for Expert AGI">
-  <meta name="keywords" content="MMMU, LMM, LMM Evaluation, Vision Language Model, Large Language Model, Large Multimodal Model, artificial intelligence, AI, AGI, artificial general intelligence">
+  <meta name="keywords" content="POET, Reparameterized LLM Training, Orthogonal Equivalence Transformation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title> SGP-Bench: Can Large Language Models Understand <strong>S</strong>ymbolic <strong>G</strong>raphics <strong>P</strong>rograms?</title>
+  <title> Reparameterized LLM Training via Orthogonal Equivalence Transformation</title>
 
   <link rel="icon" href="./static/images/poet_icon.png">
 
@@ -84,7 +84,7 @@
             <span class="mmmu" style="vertical-align: middle">POET</span>
             </h1>
           <h2 class="subtitle is-3 publication-subtitle">
-            Re<strong>p</strong>arameterized LLM Training via <br> <strong></strong>O</strong>rthogonal <strong>E</strong>quivalence <strong>T</strong>ransformation
+            Re<strong>p</strong>arameterized LLM Training via <br> <strong>O</strong>rthogonal <strong>E</strong>quivalence <strong>T</strong>ransformation
           </h2>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
@@ -305,6 +305,18 @@
                 </span>
                 <br>
                 where \( \tilde{\mathbf{G}}^j_i \in \mathbb{R}^{b \times b} \) is the \( j \)-th block of the block diagonal matrix, and \( \mathbf{\Psi}_i, \forall i \) are all random permutation matrices. As long as each diagonal block \( \tilde{\mathbf{G}}^j_i \) is an orthogonal matrix, both \( \mathbf{G}_i \) and \( \mathbf{R} \) are also orthogonal matrices. We also use CNP to efficiently parameterize each orthogonal block \( \tilde{\mathbf{G}}^j_i \).
+              </li>
+              <li>
+                <strong>Cayley-Neumann Parameterization (CNP)</strong>
+                <p>
+                  The classic Cayley parameterization generates an orthogonal matrix \(\mathbf{R}\) in the form of \(\mathbf{R}=(\mathbf{I}+\mathbf{Q})(\mathbf{I}-\mathbf{Q})^{-1}\) where \(\mathbf{Q}\) is a skew-symmetric matrix satisfying \(\mathbf{Q}=-\mathbf{Q}^\top\). A minor caveat of this parameterization is that it only produces orthogonal matrices with determinant \(1\) (i.e., elements of the special orthogonal group), but empirical results in Orthogonal Finetuning (OFT) indicate that this constraint does not hurt performance. However, the matrix inverse in the original Cayley parameterization introduces numerical instability and computational overhead, limiting its scalability to large orthogonal matrices. To address this, we approximate the matrix inverse using a truncated Neumann series:
+                </p>
+                \begin{equation}\label{eq:cnp}
+                  \mathbf{R}=(\mathbf{I}+\mathbf{Q})(\mathbf{I}-\mathbf{Q})^{-1}=(\mathbf{I}+\mathbf{Q})\cdot\big(\sum_{i=0}^\infty \mathbf{Q}^i \big) \approx (\mathbf{I}+\mathbf{Q})\cdot\big(\mathbf{I}+\sum_{i=1}^k \mathbf{Q}^i \big),
+                \end{equation}
+                <p>
+                  where a larger number of approximation terms \(k\) leads to a smaller approximation error. By avoiding matrix inversion, the training stability of POET is improved; however, this comes with a price--the approximation is valid only when the Neumann series converges in the operator norm. To initialize orthogonal matrices as identity, we set \(\mathbf{Q}\) to a zero matrix in CNP, satisfying the convergence condition initially. As the training progresses, however, updates to \(\mathbf{Q}\) may cause its operator norm to exceed \(1\), violating this condition. Fortunately, our merge-then-reinitialize trick mitigates this issue by periodically resetting \(\mathbf{Q}\) to a zero matrix, ensuring its operator norm remains small.
+                </p>
               </li>
             </ul>
           </div>
