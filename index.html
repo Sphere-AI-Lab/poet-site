@@ -195,7 +195,7 @@
       <div class="container">
         <div class="columns is-centered has-text-centered">
           <div class="column is-four-fifths">
-            <h2 class="title is-3">Spectral Perperties and Generalization</h2>
+            <h2 class="title is-3">Spectral Properties and Generalization</h2>
             <div class="content has-text-justified">
               <p>
                 The <i>de facto</i> way for training LLMs is to directly optimize weight matrices with the Adam optimizer. While conceptually simple, this direct optimization can be computationally intensive (due to the poor scaling with model size) and requires careful hyperparameter tuning to ensure stable convergence. More importantly, its generalization can remain suboptimal even if the training loss is perfectly minimized. To stabilize training and enhance generalization, various weight regularization methods and weight normalization techniques have been proposed. Most of these methods boil down to improving spectral properties of weight matrices (<i>i.e.</i>, singular values) either explicitly or implicitly. Intuitively, the spectral norm of a weight matrix (<i>i.e.</i>, the largest singular value) provides an upper bound on how much a matrix can amplify the input vectors, which connects to the generalization properties. In general, smaller spectral norms (<i>i.e.</i>, better smoothness) are considered to be associated with stronger generalization, which inspires explicit spectrum control. Theoretical results also suggest that weight matrices with bounded spectrum can provably guarantee generalization.
